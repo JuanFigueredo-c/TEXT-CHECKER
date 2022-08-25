@@ -1,66 +1,120 @@
-la palabra espanoles es incorrecta en la linea 0
-las opciones son: 
-despenoles, eseanoles, espayoles, hespanoles, espianoles, 
-la palabra y es incorrecta en la linea 0
-las opciones son: 
-aespenoles, be, ce, de, eh, 
-la palabra espanoles es incorrecta en la linea 0
-las opciones son: 
-despenoles, eseanoles, espayoles, hespanoles, espianoles, 
-la palabra 1 es incorrecta en la linea 0
-las opciones son: 
-p, que, rue, sur, sus, 
-la palabra 201 es incorrecta en la linea 0
-las opciones son: 
-ce, dae, ea, fa, ge, 
-la palabra 11 es incorrecta en la linea 0
-las opciones son: 
-na, oa, p, que, rue, 
-la palabra andres es incorrecta en la linea 0
-las opciones son: 
-adresnoles, anares, randres, anores, andaes, 
-la palabra espanol es incorrecta en la linea 0
-las opciones son: 
-espanta, etanol, espanos, espenol, espanul, 
-la palabra y es incorrecta en la linea 0
-las opciones son: 
-aspanta, be, ce, de, eh, 
-la palabra espanoles es incorrecta en la linea 0
-las opciones son: 
-despenoles, eseanoles, espayoles, hespanoles, espianoles, 
-la palabra y es incorrecta en la linea 0
-las opciones son: 
-aespenoles, be, ce, de, eh, 
-la palabra y es incorrecta en la linea 0
-las opciones son: 
-aespenoles, be, ce, de, eh, 
-la palabra espanoles es incorrecta en la linea 0
-las opciones son: 
-despenoles, eseanoles, espayoles, hespanoles, espianoles, 
-la palabra espanol es incorrecta en la linea 0
-las opciones son: 
-espanta, etanolles, espanos, espenol, espanul, 
-la palabra rafael es incorrecta en la linea 0
-las opciones son: 
-rafalta, rafael, ralael, rafadel, rafalel, 
-la palabra y es incorrecta en la linea 0
-las opciones son: 
-aafalta, be, ce, de, eh, 
-la palabra rafael es incorrecta en la linea 0
-las opciones son: 
-rafalta, rafael, ralael, rafadel, rafalel, 
-la palabra y es incorrecta en la linea 0
-las opciones son: 
-aafalta, be, ce, de, eh, 
-la palabra y es incorrecta en la linea 0
-las opciones son: 
-aafalta, be, ce, de, eh, 
-la palabra darle es incorrecta en la linea 0
-las opciones son: 
-arlelta, darle, darne, darloe, darbe, 
-la palabra a es incorrecta en la linea 0
-las opciones son: 
-crlelta, darle, earne, farloe, gerbe, 
-la palabra excepcional. es incorrecta en la linea 0
-las opciones son: 
-excepcional, excepcionala, excepcionala, excepcionale, excepcionale, 
+------------------
+Linea 0, "aut" no esta en el diccionario.
+Quizas quiso decir: 
+------------------
+Linea 0, "obcaecati" no esta en el diccionario.
+Quizas quiso decir: obceca ti, obceco ti, obceca tia, obceca tic, obceca tio, 
+------------------
+Linea 0, "beatae" no esta en el diccionario.
+Quizas quiso decir: be atoe, be atea, be ata, be ate, be atad, 
+------------------
+Linea 0, "repudiandae" no esta en el diccionario.
+Quizas quiso decir: repudian cae, repudian da, repudian de, repudian dad, repudian dan, 
+------------------
+Linea 0, "temporibus" no esta en el diccionario.
+Quizas quiso decir: tempora bus, tempo ribas, tempo rimus, tempo rebus, tempo cebus, 
+------------------
+Linea 0, "minus" no esta en el diccionario.
+Quizas quiso decir: mi bus, mi pus, mi rus, mi tus, mi cus, 
+------------------
+Linea 0, "illum" no esta en el diccionario.
+Quizas quiso decir: el hum, al pum, in bum, in pum, ir hum, 
+------------------
+Linea 0, "est" no esta en el diccionario.
+Quizas quiso decir: 
+------------------
+Linea 0, "lorem" no esta en el diccionario.
+Quizas quiso decir: lo rey, lo rea, lo red, lo rei, lo re, 
+------------------
+Linea 0, "aperiam" no esta en el diccionario.
+Quizas quiso decir: operia me, operia mi, operia mu, al erial, ale rial, 
+------------------
+Linea 0, "nam" no esta en el diccionario.
+Quizas quiso decir: 
+------------------
+Linea 0, "doloribus" no esta en el diccionario.
+Quizas quiso decir: dolor idus, dolor ibis, dolor bus, dolora bus, dolo ribas, 
+------------------
+Linea 0, "dolorem" no esta en el diccionario.
+Quizas quiso decir: dolor me, dolo re, do lorea, dolo rea, dolor ea, 
+------------------
+Linea 0, "cupiditate" no esta en el diccionario.
+Quizas quiso decir: cupido tate, cusi dilate, culi dilate, cui dilate, capi dilate, 
+------------------
+Linea 0, "laudantium" no esta en el diccionario.
+Quizas quiso decir: laudan hum, laudano pum, laudan tour, laudan true, laudan trun, 
+------------------
+Linea 0, "consectetur" no esta en el diccionario.
+Quizas quiso decir: conecte mur, conecte sur, conecte ter, conecte tui, conecte tul, 
+------------------
+Linea 0, "officia" no esta en el diccionario.
+Quizas quiso decir: os finia, afacia, ardicia, fo filia, uf finia, 
+------------------
+Linea 0, "iusto" no esta en el diccionario.
+Quizas quiso decir: bus to, cus to, mus to, pus to, rus to, 
+------------------
+Linea 0, "aspernatur" no esta en el diccionario.
+Quizas quiso decir: aspean abur, asperja sur, asperja ter, asperja tui, asperja tul, 
+------------------
+Linea 0, "adipisicing" no esta en el diccionario.
+Quizas quiso decir: 
+------------------
+Linea 0, "voluptas" no esta en el diccionario.
+Quizas quiso decir: bol untas, jo lupas, volt atas, vola poas, volve tas, 
+------------------
+Linea 0, "tenetur" no esta en el diccionario.
+Quizas quiso decir: ten eter, tene ter, tene jur, tene tui, tene tul, 
+------------------
+Linea 0, "placeat" no esta en el diccionario.
+Quizas quiso decir: place ata, placea ta, place ate, placea te, placea ti, 
+------------------
+Linea 0, "amet" no esta en el diccionario.
+Quizas quiso decir: ad et, ah et, aj et, al et, ar et, 
+------------------
+Linea 0, "sit" no esta en el diccionario.
+Quizas quiso decir: 
+------------------
+Linea 0, "eveniet" no esta en el diccionario.
+Quizas quiso decir: aveni et, veni et, ele niel, eren et, ele nies, 
+------------------
+Linea 0, "consequuntur" no esta en el diccionario.
+Quizas quiso decir: 
+------------------
+Linea 0, "elit" no esta en el diccionario.
+Quizas quiso decir: el ti, el id, el in, el ir, el et, 
+------------------
+Linea 0, "voluptates" no esta en el diccionario.
+Quizas quiso decir: voluta tes, volt ates, volteta tes, vola otates, voluntad es, 
+------------------
+Linea 0, "inventore" no esta en el diccionario.
+Quizas quiso decir: invento re, invento te, invento he, invento ve, invento je, 
+------------------
+Linea 0, "voluptate" no esta en el diccionario.
+Quizas quiso decir: voluta te, volanta te, valua tate, valuo tate, volad tate, 
+------------------
+Linea 0, "exercitationem" no esta en el diccionario.
+Quizas quiso decir: exerciva tioneo, ejercita tioneo, 
+------------------
+Linea 0, "sapiente" no esta en el diccionario.
+Quizas quiso decir: asiente, atiente, capi ente, aviente, api ente, 
+------------------
+Linea 0, "similique" no esta en el diccionario.
+Quizas quiso decir: simil aque, simil oque, simil que, si menique, simil idee, 
+------------------
+Linea 0, "quasi" no esta en el diccionario.
+Quizas quiso decir: bu asi, bua si, cu asi, dua si, fu asi, 
+------------------
+Linea 0, "ipsum" no esta en el diccionario.
+Quizas quiso decir: as pum, pi bum, pi su, in bum, ir sud, 
+------------------
+Linea 0, "ipsa" no esta en el diccionario.
+Quizas quiso decir: pi ca, pi da, pi ea, pi fa, pi ha, 
+------------------
+Linea 0, "totam" no esta en el diccionario.
+Quizas quiso decir: to tac, to mam, to tal, to tan, to tao, 
+------------------
+Linea 0, "rem" no esta en el diccionario.
+Quizas quiso decir: 
+------------------
+Linea 0, "corrupti" no esta en el diccionario.
+Quizas quiso decir: cor rusti, cor mufti, corra pei, cor cuati, corra psi, 

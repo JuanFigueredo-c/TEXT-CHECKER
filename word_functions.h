@@ -25,8 +25,10 @@ void split(char* string, int pos, int len);
 
 int normalize_word(char* string, int len, int current_line);
 
-void word_handler(char* string, int len, HashTable dict_hash, WWord* wrong_word);
+WWord* word_handler(char* string, int len, HashTable dict_hash);
 
 void word_check(char* string, int len, int current_dist, HashTable dict_hash, HashTable* dist_array, WWord* wrong_word);
 
 int apply_rules(char* string,int len,HashTable dict_hash,HashTable* dist_array,WWord* wrong_word, int current_dist);
+
+WWord* ww_create(char* string);

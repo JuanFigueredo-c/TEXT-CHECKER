@@ -15,8 +15,7 @@ char* copy_string(char* string){
 }
 
 int comp_string(char* string1, char* string2){
-    int len = strlen(string1);
-    return memcmp(string1, string2,len);
+    return strcmp(string1, string2);
 }
 
 void destr_string(char* string){

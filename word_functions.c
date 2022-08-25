@@ -36,9 +36,10 @@ int normalize_word(char* string, int len, int current_line){
 //intercambiar dos letras adyacentes
 int rule_1(char* string, int len, HashTable dict_hash, HashTable* dist_array, WWord *wrong_word, int current_dist){
 
-    char* result = malloc(sizeof(char)*len);
+    char* result = malloc(sizeof(char)*len + 2);
+
     for(int i = 0; i < len - 1; i ++){
-        memcpy(result, string, len+1);
+        memcpy(result, string,len + 1);
         result[i] = string[i + 1];
         result[i+1] = string[i];
         // printf("%s\n", result);
@@ -60,11 +61,11 @@ int rule_1(char* string, int len, HashTable dict_hash, HashTable* dist_array, WW
 // insertar las letras A - Z en cualquier posicion de la palabra
 int rule_2(char* string, int len, HashTable dict_hash, HashTable* dist_array, WWord* wrong_word, int current_dist){
 
-    char* result = malloc(sizeof(char)*len+1);
-
+    char* result = malloc(sizeof(char)*len+2);
+    char aux;
+    strcpy(result," ");
+    strcat(result,string);
     for(int i = 0; i < len + 1; i++){
-        memcpy(result, string, len);
-        split(result, i , len);
         for(int j = 97; j < 123; j ++){
             result[i] = (char) j;
             // printf("%s\n",result);
@@ -76,6 +77,10 @@ int rule_2(char* string, int len, HashTable dict_hash, HashTable* dist_array, WW
                 return 1;
             }
         }
+        
+        aux = result[i + 1];
+        result[i + 1] = result[i];
+        result[i] = aux;
         }
         free(result);
         return 0;
@@ -85,10 +90,10 @@ int rule_2(char* string, int len, HashTable dict_hash, HashTable* dist_array, WW
 // eliminar cada caracter
 int rule_3(char* string, int len, HashTable dict_hash, HashTable* dist_array, WWord* wrong_word, int current_dist){
     
-    char* result = malloc(sizeof(char)*len);
+    char* result = malloc(sizeof(char)*len+2);
     
     for(int i = 0; i < len; i++){
-        memcpy(result, string, len);
+        memcpy(result, string, len + 1);
         for(int j = i; j < len; j++){
             result[j] = result[j + 1];
         }
@@ -110,10 +115,10 @@ int rule_3(char* string, int len, HashTable dict_hash, HashTable* dist_array, WW
 // intercambia las letras de la a a la z
 int rule_4(char* string, int len, HashTable dict_hash, HashTable* dist_array, WWord* wrong_word, int current_dist){
 
-    char *result = malloc(sizeof(char)*len);
+    char *result = malloc(sizeof(char)*len+2);
     
     for(int i = 0; i < len; i++){
-        memcpy(result, string, len);    
+        memcpy(result, string,len + 1);    
         for(int j = 97; j < 123; j++){
             result[i] = (char) j;
             result[len] = '\0';
@@ -132,12 +137,12 @@ int rule_4(char* string, int len, HashTable dict_hash, HashTable* dist_array, WW
 // separa las palabras en 2
 
 int rule_5(char* string, int len, HashTable dict_hash, WWord* wrong_word){
-    char* result = malloc(sizeof(char)*len + 1);
+    char* result = malloc(sizeof(char)*len + 2);
     char* word1 = malloc(sizeof(char)*len);
     char* word2 = malloc(sizeof(char)*len);
     
     for(int i = 1; i < len ; i ++){
-        memcpy(result, string, len);
+        memcpy(result, string, len + 1);
         split(result, i, len);
         memcpy(word1, result, i);
         word1[i] = '\0';
@@ -148,7 +153,7 @@ int rule_5(char* string, int len, HashTable dict_hash, WWord* wrong_word){
 
 
         if(hash_search(dict_hash, word1) == 1 && hash_search(dict_hash, word2) == 1){
-            strcpy(wrong_word->options[wrong_word->cant],string);
+            strcpy(wrong_word->options[wrong_word->cant],result);
             wrong_word->cant++;
         }
         if(wrong_word->cant == 5){
@@ -180,12 +185,12 @@ void word_check(char* string, int len, int current_dist, HashTable dict_hash, Ha
     if(bandera == 0){
         if( hash_search(dict_hash, string) == 1){
             bandera = 1;
-            for(int i = 0; i < wrong_word->cant; i++){
+            for(int i = 0; i < 5; i++){
                 bandera = strcmp(string, wrong_word->options[i]);
-                if(bandera == 0) i = wrong_word->cant;
+                if(bandera == 0) i = 5;
             }
             if(bandera == 1){
-                memcpy(wrong_word->options[wrong_word->cant],string, len);
+                strcpy(wrong_word->options[wrong_word->cant],string);
                 wrong_word->cant++;
             }
     }
@@ -195,7 +200,22 @@ void word_check(char* string, int len, int current_dist, HashTable dict_hash, Ha
 
 }
 
-void word_handler(char* string, int len, HashTable dict_hash, WWord* wrong_word){
+WWord* ww_create(char* string){
+
+    WWord* wrong_word = malloc(sizeof(WWord));
+    wrong_word->string = malloc(sizeof(char)*40);
+    strcpy(wrong_word->string, string);
+    wrong_word->cant = 0;
+    wrong_word->options = malloc(sizeof(char*)*5);
+    for(int i = 0; i < 5; i++)
+        wrong_word->options[i] = malloc(sizeof(char)*40);
+
+    wrong_word->line = 0;
+    
+    return wrong_word;
+}
+
+WWord* word_handler(char* string, int len, HashTable dict_hash){
 
     HashTable* dist_array = malloc(sizeof(HashTable)*MAX_DIST - 1);
     for(int i = 0; i < MAX_DIST - 1; i++){
@@ -203,6 +223,7 @@ void word_handler(char* string, int len, HashTable dict_hash, WWord* wrong_word)
                                     dict_hash->destr, dict_hash->hash);
     }
     
+    WWord* wrong_word = ww_create(string);
     int bandera = 0;
     int len_word = 0;
     unsigned int dict_cap = 0;
@@ -226,7 +247,7 @@ void word_handler(char* string, int len, HashTable dict_hash, WWord* wrong_word)
                     bandera = apply_rules(temp->data, len_word, dict_hash, dist_array, wrong_word, i);
                     temp = temp->next;
                     if(bandera == 1){
-                        printf("ADENTRO\n");
+                        // printf("ADENTRO\n");
                         j = dict_cap;
                         i = MAX_DIST + 1;
                         temp = NULL;
@@ -235,13 +256,13 @@ void word_handler(char* string, int len, HashTable dict_hash, WWord* wrong_word)
             }
         }
     }
-    printf("AFUERA\n");
+    // printf("AFUERA\n");
 
     for(int i = 0; i < MAX_DIST -1; i ++){
         hash_destroy(dist_array[i]);
     }
     free(dist_array);
-    return;
+    return wrong_word;
 }
 
 
