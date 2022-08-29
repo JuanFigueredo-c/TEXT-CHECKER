@@ -13,7 +13,6 @@ GList glist_insert(GList list, void* data,
     
     for(GNode *temp = list ;temp!=NULL; temp = temp->next){
         if(comp(temp->data, data) == 0){
-            // printf("EL DATO YA ESTA ALMACENADO!\n");
             return list;
         }
     }
@@ -29,8 +28,6 @@ GList glist_insert(GList list, void* data,
         return list;
     }
 
-
-    // printf("COLISION!\n");
     GNode *temp = list;
     for(; temp->next!=NULL; temp = temp->next);
     temp->next = newnode;

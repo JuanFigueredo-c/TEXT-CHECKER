@@ -5,38 +5,34 @@
 #include "hash_table.h"
 #include "utils.h"
 
-#define CAPACIDAD 6
+#define CAPACITY 500
 
-
+/** Funcion copiadora para strings*/
 char* copy_string(char* string){
-    char* copy = malloc(sizeof(char)*30);
+    char* copy = malloc(sizeof(char)*40);
     strcpy(copy, string);
     return copy;
 }
 
+/** Funcion comparadora para strings*/
 int comp_string(char* string1, char* string2){
     return strcmp(string1, string2);
 }
 
+/** Funcion destructora para strings*/
 void destr_string(char* string){
     free(string);
     return;
 }
 
+/** Funcion hash para strings*/
 unsigned hash_string(char* string){
     return KRHash(string);
 }
 
-void impr(char* string){
-    printf("*%s",string);
-}
 
 HashTable hash_dict(){
-    char *palabra;
-    palabra = malloc(sizeof(char)*30);
-
-
-    HashTable dict_hash = hash_create(CAPACIDAD, (FuncionComparadora) comp_string,
+    HashTable dict_hash = hash_create(CAPACITY, (FuncionComparadora) comp_string,
                             (FuncionCopiadora) copy_string, (FuncionDestructora) destr_string,
                             (FuncionHash) hash_string);
                     
@@ -47,17 +43,16 @@ HashTable hash_dict(){
     FILE * fp;
     fp = fopen(filename,"r+");
 
-
+    char *string = malloc(sizeof(char)*40);
+    
     while(!feof(fp)){
-        fscanf(fp,"%s", palabra);
-        hash_insert(dict_hash, palabra);
+        fscanf(fp,"%s", string);
+        hash_insert(dict_hash, string);
     }
 
     fclose(fp);
-    // hash_show(dict_hash);
 
-    // hash_destroy(dict_hash);
-    free(palabra);
+    free(string);
     free(filename);
 
     return dict_hash;

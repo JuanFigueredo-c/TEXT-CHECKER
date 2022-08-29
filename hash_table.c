@@ -37,32 +37,6 @@ HashTable hash_insert(HashTable tabla, void* dato){
     return tabla;
 }
 
-void hash_pop(HashTable tabla, void* dato){
-    unsigned idx = tabla->hash(dato) % tabla->capacidad;
-    GNode *node_to_delete;
-
-    if (tabla->array[idx] == NULL){
-        printf("El dato a eliminar no esta en la tabla hash\n");
-        return;
-    }
-    if (tabla->comp(tabla->array[idx]->data, dato) == 1){
-        node_to_delete = tabla->array[idx];
-        tabla->destr(node_to_delete->data);
-        tabla->array[idx] = node_to_delete->next;
-        free(node_to_delete);
-        return;
-    }
-
-    GNode *temp = tabla->array[idx];
-    for(; temp->next != NULL; temp = temp->next){
-        if(tabla->comp(temp->next->data, dato) == 1)
-        node_to_delete = temp->next;
-        temp->next = node_to_delete->next;
-        tabla->destr(node_to_delete->data);
-        free(node_to_delete);
-        return;
-    }
-}
 
 void hash_destroy(HashTable tabla){
 
@@ -78,13 +52,6 @@ int hash_search(HashTable tabla, void* dato){
 
     if(tabla->array[idx] == NULL)
         return 0;
-    
-    // for(GNode *temp = tabla->array[idx]; temp!=NULL; temp = temp->next){
-    //     if(tabla->comp(dato, temp->data) == 0){
-    //         // printf("DATO ENCONTRADO EN LA POSICION %u\n", idx);
-    //         return 1;
-    //     }   
-    // }
 
     GNode *temp = tabla->array[idx];
     while(temp != NULL){
@@ -95,15 +62,20 @@ int hash_search(HashTable tabla, void* dato){
     return 0;
 }
 
-void hash_show(HashTable tabla){
-    for(unsigned i = 0; i < tabla->capacidad; i++){
-        printf("%u) ",i);
-        for(GNode *temp = tabla->array[i]; temp!=NULL; temp = temp->next){
-        impr(temp->data);
-        printf(" ---> ");
-      }
-      printf("\n");
-      }
+void* hash_get(HashTable tabla, void* data){
+    unsigned idx = tabla->hash(data) % tabla->capacidad;
+
+    if(tabla->array[idx]) return NULL;
+    else{
+        int bandera = 0;
+        GNode* temp = tabla->array[idx];
+        while(temp!= NULL){
+            if(tabla->comp(temp->data, data) == 1)
+                return temp->data;
+            temp = temp->next;
+        }
+    }
+    return NULL;
 }
 
 void hash_resize(HashTable tabla){
