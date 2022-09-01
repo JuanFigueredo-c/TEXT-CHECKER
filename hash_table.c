@@ -24,11 +24,11 @@ HashTable hash_create(unsigned capacidad,
     return tabla; 
     }
 
-HashTable hash_insert(HashTable tabla, void* dato){
+HashTable hash_insert(HashTable tabla, void* dato, int len){
 
     unsigned idx = tabla->hash(dato) % tabla->capacidad;
 
-    tabla->array[idx] = glist_insert(tabla->array[idx], dato, tabla->copy, tabla->comp);
+    tabla->array[idx] = glist_insert(tabla->array[idx], dato, tabla->copy, tabla->comp, len);
     tabla->elems++;
     float charge_factor = (float) tabla->elems / tabla->capacidad;
     if(charge_factor > CHARGE_FACTOR){

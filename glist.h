@@ -12,7 +12,7 @@ GList glist_create();
 
 /** Inserta el dato recibido al final de la lista enlazada recibida */
 GList glist_insert(GList list, void* data,
-     void* (*copy) (void*), int (*comp)(void*, void*));
+     void* (*copy) (void*, int), int (*comp)(void*, void*), int len);
 
 /** Destruye la lista enlazada general */
 void glist_destroy(GList list, void (*destr)(void*));

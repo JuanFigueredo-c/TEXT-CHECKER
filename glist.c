@@ -9,7 +9,7 @@
 GList glist_create(){ return NULL;}
 
 GList glist_insert(GList list, void* data,
-     void* (*copy) (void*), int (*comp)(void*, void*)){
+     void* (*copy) (void*, int), int (*comp)(void*, void*), int len){
     
     for(GNode *temp = list ;temp!=NULL; temp = temp->next){
         if(comp(temp->data, data) == 0){
@@ -18,7 +18,7 @@ GList glist_insert(GList list, void* data,
     }
     
     GNode *newnode = malloc(sizeof(GNode));
-    newnode->data = copy(data);
+    newnode->data = copy(data, len);
     newnode->next = NULL;
     newnode->last = NULL;
 

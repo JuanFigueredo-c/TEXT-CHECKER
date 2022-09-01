@@ -2,7 +2,7 @@
 
 
 /** Retorna una copia fisica del dato */
-typedef void *(*FuncionCopiadora)(void *dato);
+typedef void *(*FuncionCopiadora)(void *dato, int dato2);
 /** Retorna 1 si son iguales, 0 si no*/
 typedef int (*FuncionComparadora)(void *dato1, void *dato2);
 /** Libera la memoria alocada para el dato */
@@ -32,7 +32,7 @@ HashTable hash_create( unsigned capacidad, FuncionComparadora comp,
  * si el dato ya estaba almacenado, no lo almacena.
  * Verfica que el factor de carga de la tabla se mantenga dentro de un
  * limite establecido, si lo sobre pasa, redimensiona la tabla */
-HashTable hash_insert(HashTable tabla, void* dato);
+HashTable hash_insert(HashTable tabla, void* dato, int len);
 
 /** Redimensiona la tabla hash recibida. Duplica su capacidad
  * y re-hashea los datos. */

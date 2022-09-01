@@ -3,12 +3,14 @@
 
 #include "hash_table.h"
 #define MAX_DIST 3
+#define MAX_LEN 40
 
 typedef struct{
     char* string;
     int line;
     char** options;
     int cant;
+    int len;
 } WWord;
 
 /** Intercambia dos letras adyacentes.
@@ -43,7 +45,7 @@ int replace_rule(char* string, int len, HashTable dict_hash, HashTable* dist_arr
 int divide_rule(char* string, int len, HashTable dict_hash, WWord* wrong_word);
 
 
-void word_handler(char* string, int len, HashTable dict_hash, WWord* wrong_word);
+void wrong_word_handler(char* string, int len, HashTable dict_hash, WWord* wrong_word);
 
 /** Verifica distintos puntos sobre la palabra recibida:
  * Primero, verifica si la palabra recibida no ha sido analizada previamente en alguna de las distancias anteriores o la actual.

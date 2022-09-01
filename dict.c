@@ -1,16 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "hash_table.h"
 #include "utils.h"
 
 #define CAPACITY 500
+#define MAX_LEN 40
 
 /** Funcion copiadora para strings*/
-char* copy_string(char* string){
-    char* copy = malloc(sizeof(char)*40);
-    strcpy(copy, string);
+char* copy_string(char* string, int len){
+    char* copy = malloc(sizeof(char)*len+1);
+    memcpy(copy, string, len+1);
     return copy;
 }
 
@@ -36,23 +38,33 @@ HashTable hash_dict(){
                             (FuncionCopiadora) copy_string, (FuncionDestructora) destr_string,
                             (FuncionHash) hash_string);
                     
-    char* filename = malloc(sizeof(char)*40);
+    char* filename = malloc(sizeof(char)*MAX_LEN);
     printf("Ingrese el nombre del archivo de diccionario a utilizar: ");
     scanf("%s", filename);
 
     FILE * fp;
     fp = fopen(filename,"r+");
 
-    char *string = malloc(sizeof(char)*40);
+    char buffer[MAX_LEN], caracter;
+    int len = 0;
     
     while(!feof(fp)){
-        fscanf(fp,"%s", string);
-        hash_insert(dict_hash, string);
+        caracter = tolower(fgetc(fp));
+        if((unsigned int) caracter >= 97 && (unsigned int)caracter <= 122){
+            buffer[len] = caracter;
+            len++;
+        }
+        else{
+            buffer[len] = '\0';
+            if(len > 0){
+                hash_insert(dict_hash, buffer, len);
+            }
+            len = 0;
+        }
     }
 
     fclose(fp);
 
-    free(string);
     free(filename);
 
     return dict_hash;

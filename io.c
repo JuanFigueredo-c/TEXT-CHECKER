@@ -9,17 +9,17 @@ void impr(WWord* data){
     printf("%s\n",data->string);
 }
 
-WWord* copy_wword(WWord* wrong_word){
+WWord* copy_wword(WWord* wrong_word, int len){
     WWord* copy = malloc(sizeof(WWord));
-    copy->string = malloc(sizeof(char)*40);
-    strcpy(copy->string, wrong_word->string);
+    copy->string = malloc(sizeof(char)*len+1);
+    memcpy(copy->string, wrong_word->string, len+1);
     copy->cant = wrong_word->cant;
     copy->line = wrong_word->line;
     copy->options = malloc(sizeof(char*)*5);
     for(int i = 0; i < 5; i ++){
-        copy->options[i] = malloc(sizeof(char)*40);
+        copy->options[i] = malloc(sizeof(char)*len+3);
         if(i < wrong_word->cant) 
-            strcpy(copy->options[i], wrong_word->options[i]);    
+            memcpy(copy->options[i], wrong_word->options[i], len+3);    
     }
     return copy;
 }
@@ -48,7 +48,7 @@ void get_wword(HashTable wword_hash, WWord* data, int current_line, FILE * fp2){
     GNode* temp = wword_hash->array[idx];
     while(temp!= NULL){
         if(wword_hash->comp(temp->data, data) == 0){
-            aux = copy_wword(temp->data);
+            aux = copy_wword(temp->data, data->len);
             aux->line = current_line;
             write(aux, fp2);
             break;
@@ -58,35 +58,17 @@ void get_wword(HashTable wword_hash, WWord* data, int current_line, FILE * fp2){
     destr_wword(aux);
 }
 
-void write(WWord* wrong_word, FILE * fp){
-
-    fprintf(fp,"------------------\n");
-    fprintf(fp,"Linea %d, \"%s\" no esta en el diccionario.\n",wrong_word->line, wrong_word->string);
-    if(wrong_word->cant > 0){
-        fprintf(fp,"Quizas quiso decir: ");
-        for(int j = 0; j < wrong_word->cant; j++){
-            fprintf(fp,"%s, ",wrong_word->options[j]);
-        }        
-        fprintf(fp,"\n");
-    }
-    else{
-        fprintf(fp, "No se han encontrado sugerencias para esta palabra.\n");
-    }
-}
 
 void handle_files(HashTable dict_hash, char* input_file, char* output_file){
 
     HashTable wword_hash = hash_create(500, (FuncionComparadora) comp_wword, (FuncionCopiadora) copy_wword,
                                         (FuncionDestructora) destr_wword, (FuncionHash) hash_wword);
                                         
-    char* string = malloc(sizeof(char)*40);
     char caracter;
-    char buffer[40];
+    char buffer[MAX_LEN];
     int len = 0, current_line= 1;
 
     WWord* wrong_word= ww_create();
-    WWord* aux = malloc(sizeof(WWord));
-    aux->string = malloc(sizeof(char)*40);
 
     FILE * fp1 = fopen(input_file, "r+");
     FILE * fp2 = fopen(output_file, "w+");
@@ -101,14 +83,14 @@ void handle_files(HashTable dict_hash, char* input_file, char* output_file){
         else{
             buffer[len] = '\0';
             if(len > 0){
-                strcpy(string, buffer);
-                if(hash_search(dict_hash, string) == 0){
-                    strcpy(wrong_word->string,string); 
+                memcpy(wrong_word->string, buffer, len+1);
+                if(hash_search(dict_hash, wrong_word->string) == 0){
                     wrong_word->cant = 0;
+                    wrong_word->len = len;
                     if(hash_search(wword_hash, wrong_word) == 0){
-                        word_handler(string, len, dict_hash, wrong_word);
+                        wrong_word_handler(wrong_word->string, len, dict_hash, wrong_word);
                         wrong_word->line = current_line;
-                        wword_hash = hash_insert(wword_hash, wrong_word);
+                        wword_hash = hash_insert(wword_hash, wrong_word, wrong_word->len);
                         write(wrong_word, fp2);
                     }
                     else{
@@ -127,7 +109,22 @@ void handle_files(HashTable dict_hash, char* input_file, char* output_file){
     destr_wword(wrong_word);
     hash_destroy(wword_hash);
     
-    free(string);
-    free(aux->string);
-    free(aux);
+}
+
+
+
+void write(WWord* wrong_word, FILE * fp){
+
+    fprintf(fp,"------------------\n");
+    fprintf(fp,"Linea %d, \"%s\" no esta en el diccionario.\n",wrong_word->line, wrong_word->string);
+    if(wrong_word->cant > 0){
+        fprintf(fp,"Quizas quiso decir: ");
+        for(int j = 0; j < wrong_word->cant; j++){
+            fprintf(fp,"%s, ",wrong_word->options[j]);
+        }        
+        fprintf(fp,"\n");
+    }
+    else{
+        fprintf(fp, "No se han encontrado sugerencias para esta palabra.\n");
+    }
 }
