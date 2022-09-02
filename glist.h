@@ -1,3 +1,8 @@
+// TP FINAL - ESTRUCTURAS DE DATOS Y ALGORITMOS 1
+// JUAN BAUTISTA FIGUEREDO
+
+#ifndef __GLIST_H__
+#define __GLIST_H__
 
 typedef struct _GNode{
     struct _GNode *next;
@@ -16,3 +21,5 @@ GList glist_insert(GList list, void* data,
 
 /** Destruye la lista enlazada general */
 void glist_destroy(GList list, void (*destr)(void*));
+
+#endif

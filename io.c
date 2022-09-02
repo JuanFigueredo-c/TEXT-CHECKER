@@ -1,130 +1,154 @@
+// TP FINAL - ESTRUCTURAS DE DATOS Y ALGORITMOS 1
+// JUAN BAUTISTA FIGUEREDO
+
+// TP FINAL - ESTRUCTURAS DE DATOS Y ALGORITMOS 1
+// JUAN BAUTISTA FIGUEREDO
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
 #include "io.h"
+#include "utils.h"
 
-void impr(WWord* data){
-    printf("%s\n",data->string);
+
+// FUNCIONES PARA NODOS TIPO 'WWord'
+
+void impr(WWord * data) {
+  printf("%s\n", data->string);
 }
 
-WWord* copy_wword(WWord* wrong_word, int len){
-    WWord* copy = malloc(sizeof(WWord));
-    copy->string = malloc(sizeof(char)*len+1);
-    memcpy(copy->string, wrong_word->string, len+1);
-    copy->cant = wrong_word->cant;
-    copy->line = wrong_word->line;
-    copy->options = malloc(sizeof(char*)*5);
-    for(int i = 0; i < 5; i ++){
-        copy->options[i] = malloc(sizeof(char)*len+3);
-        if(i < wrong_word->cant) 
-            memcpy(copy->options[i], wrong_word->options[i], len+3);    
-    }
-    return copy;
-}
- 
-int comp_wword(WWord* wrong_word1, WWord* wrong_word2){
-    return strcmp(wrong_word1->string, wrong_word2->string);
+WWord *copy_wword(WWord * wrongWord, int len) {
+  WWord *copy = malloc(sizeof(WWord));
+  copy->string = malloc(sizeof(char) * len + 1);
+  memcpy(copy->string, wrongWord->string, len + 1);
+  copy->cant = wrongWord->cant;
+  copy->line = wrongWord->line;
+  copy->options = malloc(sizeof(char*) * 5);
+  for (int i = 0; i < 5; i++) {
+    copy->options[i] = malloc(sizeof(char) * len + 3);
+    if (i < wrongWord->cant)
+      memcpy(copy->options[i], wrongWord->options[i], len + 3);
+  }
+  return copy;
 }
 
-void destr_wword(WWord* wrong_word){
-    for(int i = 0; i < 5; i++){
-        free(wrong_word->options[i]);
-    }
-    free(wrong_word->options);
-    free(wrong_word->string);
-    free(wrong_word);
+int comp_wword(WWord * wrongWord1, WWord * wrongWord2) {
+  return strcmp(wrongWord1->string, wrongWord2->string);
+}
+
+void destr_wword(WWord * wrongWord) {
+  for (int i = 0; i < 5; i++) {
+    free(wrongWord->options[i]);
+  }
+  free(wrongWord->options);
+  free(wrongWord->string);
+  free(wrongWord);
+  return;
+}
+
+unsigned hash_wword(WWord * wrongWord) {
+  return KRHash(wrongWord->string);
+}
+
+
+// FUNCIONES PARA EL MANEJO DE ARCHIVOS/PALABRAS
+
+void handle_files(HashTable dict, char *inputFileName, char *outputFileName) {
+
+
+  FILE *inputFile = fopen(inputFileName, "r+");
+
+  if(inputFile == NULL) {
+    printf("El archivo \"%s\" no existe en el directorio\n", inputFileName);
     return;
+  }
+
+  printf("corrigiendo texto del archivo \"%s\"....\n", inputFileName);
+
+  FILE *outputFile = fopen(outputFileName, "w+");
+
+  HashTable wwordHash =
+    hash_create(500, (FuncionComparadora) comp_wword,
+                  (FuncionCopiadora) copy_wword,
+                  (FuncionDestructora) destr_wword, (FuncionHash) hash_wword);
+  
+  char caracter;
+  char buffer[MAX_LEN];
+  int len = 0, currentLine = 1;
+
+  WWord *wrongWord = ww_create();
+
+  while (!feof(inputFile)) {
+    caracter = tolower(fgetc(inputFile));
+    if ((unsigned int) caracter >= 97 && (unsigned int) caracter <= 122) {
+      buffer[len] = caracter;
+      len++;
+    } 
+    else {
+      buffer[len] = '\0';  
+      if (len > 0) {
+        wrongWord->len = len;
+        memcpy(wrongWord->string, buffer, len + 1);
+        analyze_word(wrongWord, dict, wwordHash, currentLine, outputFile);
+      }
+      if (caracter == '\n' || caracter == EOF)
+        currentLine++;
+      len = 0;
+    }
+  }
+
+  printf("El archivo con las correcciones \"%s\" ha sido escrito.\n", outputFileName);
+  fclose(inputFile);
+  fclose(outputFile);
+
+  destr_wword(wrongWord);
+  hash_destroy(wwordHash);
 }
 
-unsigned hash_wword(WWord* wrong_word){
-    return KRHash(wrong_word->string);
+void analyze_word(WWord* wrongWord, HashTable dict, HashTable wwordHash, int currentLine, FILE* outputFile) {
+  WWord *aux;
+  if (hash_search(dict, wrongWord->string) == 0) {
+    wrongWord->cant = 0;
+    if (hash_search(wwordHash, wrongWord) == 0) {
+      wrong_word_handler(wrongWord->string, wrongWord->len, dict, wrongWord);
+      wrongWord->line = currentLine;
+      wwordHash = hash_insert(wwordHash, wrongWord, wrongWord->len);
+      write(wrongWord, outputFile);
+    } else {
+      aux = get_wword(wwordHash, wrongWord, currentLine);
+      write(aux, outputFile);
+      destr_wword(aux);
+    }
+  }
 }
 
-void get_wword(HashTable wword_hash, WWord* data, int current_line, FILE * fp2){
-    unsigned idx = wword_hash->hash(data) % wword_hash->capacidad;
-    WWord* aux;
-    GNode* temp = wword_hash->array[idx];
-    while(temp!= NULL){
-        if(wword_hash->comp(temp->data, data) == 0){
-            aux = copy_wword(temp->data, data->len);
-            aux->line = current_line;
-            write(aux, fp2);
-            break;
-        }
-        temp = temp->next;
+WWord* get_wword(HashTable wwordHash, WWord * data, int currentLine) {
+  unsigned idx = wwordHash->hash(data) % wwordHash->capacity;
+  WWord *aux;
+  GNode *temp = wwordHash->array[idx];
+  while (temp != NULL) {
+    if (wwordHash->comp(temp->data, data) == 0) {
+      aux = copy_wword(temp->data, data->len);
+      aux->line = currentLine;
+      break;
     }
-    destr_wword(aux);
+    temp = temp->next;
+  }
+  return aux;
 }
 
-
-void handle_files(HashTable dict_hash, char* input_file, char* output_file){
-
-    HashTable wword_hash = hash_create(500, (FuncionComparadora) comp_wword, (FuncionCopiadora) copy_wword,
-                                        (FuncionDestructora) destr_wword, (FuncionHash) hash_wword);
-                                        
-    char caracter;
-    char buffer[MAX_LEN];
-    int len = 0, current_line= 1;
-
-    WWord* wrong_word= ww_create();
-
-    FILE * fp1 = fopen(input_file, "r+");
-    FILE * fp2 = fopen(output_file, "w+");
-
-    printf("corrigiendo texto del archivo \"%s\"....\n",input_file);
-    while(!feof(fp1)){
-        caracter = tolower(fgetc(fp1));
-        if((unsigned int) caracter >= 97 && (unsigned int)caracter <= 122){
-            buffer[len] = caracter;
-            len++;
-        }
-        else{
-            buffer[len] = '\0';
-            if(len > 0){
-                memcpy(wrong_word->string, buffer, len+1);
-                if(hash_search(dict_hash, wrong_word->string) == 0){
-                    wrong_word->cant = 0;
-                    wrong_word->len = len;
-                    if(hash_search(wword_hash, wrong_word) == 0){
-                        wrong_word_handler(wrong_word->string, len, dict_hash, wrong_word);
-                        wrong_word->line = current_line;
-                        wword_hash = hash_insert(wword_hash, wrong_word, wrong_word->len);
-                        write(wrong_word, fp2);
-                    }
-                    else{
-                        get_wword(wword_hash, wrong_word,current_line, fp2);
-                    }
-                }
-            }
-            if(caracter == '\n'|| caracter == EOF) current_line++;
-            len = 0;
-        }
+void write(WWord * wrongWord, FILE * outputFile) { 
+  fprintf(outputFile, "Linea %d, \"%s\" no esta en el diccionario.\n", wrongWord->line,
+          wrongWord->string);
+  if (wrongWord->cant > 0) {
+    fprintf(outputFile, "Quizas quiso decir: ");
+    for (int j = 0; j < wrongWord->cant; j++) {
+      fprintf(outputFile, "%s, ", wrongWord->options[j]);
     }
-    printf("El archivo con las correcciones \"%s\" ha sido escrito.\b",output_file);
-    fclose(fp1);
-    fclose(fp2);
-    
-    destr_wword(wrong_word);
-    hash_destroy(wword_hash);
-    
-}
-
-
-
-void write(WWord* wrong_word, FILE * fp){
-
-    fprintf(fp,"------------------\n");
-    fprintf(fp,"Linea %d, \"%s\" no esta en el diccionario.\n",wrong_word->line, wrong_word->string);
-    if(wrong_word->cant > 0){
-        fprintf(fp,"Quizas quiso decir: ");
-        for(int j = 0; j < wrong_word->cant; j++){
-            fprintf(fp,"%s, ",wrong_word->options[j]);
-        }        
-        fprintf(fp,"\n");
-    }
-    else{
-        fprintf(fp, "No se han encontrado sugerencias para esta palabra.\n");
-    }
+    fprintf(outputFile, "\n");
+  } else {
+    fprintf(outputFile, "No se han encontrado sugerencias para esta palabra.\n");
+  }
 }

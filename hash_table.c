@@ -1,115 +1,116 @@
+// TP FINAL - ESTRUCTURAS DE DATOS Y ALGORITMOS 1
+// JUAN BAUTISTA FIGUEREDO
+
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "hash_table.h"
+
 #define CHARGE_FACTOR 0.75
 
-HashTable hash_create(unsigned capacidad,
-                FuncionComparadora comp, FuncionCopiadora copy,
-                FuncionDestructora destr, FuncionHash hash){
-    
-    HashTable tabla = malloc(sizeof(struct _HashTable));
+HashTable hash_create(unsigned capacity,
+                      FuncionComparadora comp, FuncionCopiadora copy,
+                      FuncionDestructora destr, FuncionHash hash) {
 
-    tabla->comp = comp;
-    tabla->destr = destr;
-    tabla->copy = copy;
-    tabla->hash = hash;
+  HashTable tabla = malloc(sizeof(struct _HashTable));
 
-    tabla->capacidad = capacidad;
-    tabla->elems = 0;
+  tabla->comp = comp;
+  tabla->destr = destr;
+  tabla->copy = copy;
+  tabla->hash = hash;
 
-    tabla->array = malloc(sizeof(GList)*capacidad);
-    for(unsigned i = 0; i < capacidad; i++){
-        tabla->array[i] = NULL;
-    }
-    return tabla; 
-    }
+  tabla->capacity = capacity;
+  tabla->elems = 0;
 
-HashTable hash_insert(HashTable tabla, void* dato, int len){
+  tabla->array = malloc(sizeof(GList) * capacity);
+  for (unsigned i = 0; i < capacity; i++) {
+    tabla->array[i] = NULL;
+  }
+  return tabla;
+}
 
-    unsigned idx = tabla->hash(dato) % tabla->capacidad;
+HashTable hash_insert(HashTable tabla, void *dato, int len) {
 
-    tabla->array[idx] = glist_insert(tabla->array[idx], dato, tabla->copy, tabla->comp, len);
-    tabla->elems++;
-    float charge_factor = (float) tabla->elems / tabla->capacidad;
-    if(charge_factor > CHARGE_FACTOR){
-        hash_resize(tabla);
-    }
-    return tabla;
+  unsigned idx = tabla->hash(dato) % tabla->capacity;
+
+  tabla->array[idx] =
+      glist_insert(tabla->array[idx], dato, tabla->copy, tabla->comp, len);
+  tabla->elems++;
+  float chargeFactor = (float) tabla->elems / tabla->capacity;
+  if (chargeFactor > CHARGE_FACTOR) {
+    hash_resize(tabla);
+  }
+  return tabla;
 }
 
 
-void hash_destroy(HashTable tabla){
+void hash_destroy(HashTable tabla) {
 
-    for(unsigned i = 0; i < tabla->capacidad; i++)
-        glist_destroy(tabla->array[i], tabla->destr);
+  for (unsigned i = 0; i < tabla->capacity; i++)
+    glist_destroy(tabla->array[i], tabla->destr);
 
-    free(tabla->array);
-    free(tabla);
+  free(tabla->array);
+  free(tabla);
 }
 
-int hash_search(HashTable tabla, void* dato){
-    unsigned idx = tabla->hash(dato) % tabla->capacidad;
+int hash_search(HashTable tabla, void *dato) {
+  unsigned idx = tabla->hash(dato) % tabla->capacity;
 
-    if(tabla->array[idx] == NULL)
-        return 0;
-
-    GNode *temp = tabla->array[idx];
-    while(temp != NULL){
-        if(tabla->comp(dato, temp->data) == 0) return 1;
-        temp = temp->next;
-    }
-
+  if (tabla->array[idx] == NULL)
     return 0;
+
+  GNode *temp = tabla->array[idx];
+  while (temp != NULL) {
+    if (tabla->comp(dato, temp->data) == 0)
+      return 1;
+    temp = temp->next;
+  }
+
+  return 0;
 }
 
-void* hash_get(HashTable tabla, void* data){
-    unsigned idx = tabla->hash(data) % tabla->capacidad;
+void *hash_get(HashTable tabla, void *data) {
+  unsigned idx = tabla->hash(data) % tabla->capacity;
 
-    if(tabla->array[idx]) return NULL;
-    else{
-        int bandera = 0;
-        GNode* temp = tabla->array[idx];
-        while(temp!= NULL){
-            if(tabla->comp(temp->data, data) == 1)
-                return temp->data;
-            temp = temp->next;
-        }
-    }
+  if (tabla->array[idx])
     return NULL;
-}
-
-void hash_resize(HashTable tabla){
-    unsigned new_capacity = tabla->capacidad*2;
-
-    GList *resized_array = malloc(sizeof(GList)*new_capacity);
-    for(unsigned i = 0; i < new_capacity; i++)
-        resized_array[i] = NULL;
-
-    unsigned idx;
-
-    for(unsigned i = 0; i < tabla->capacidad; i++){
-        GNode *temp = tabla->array[i];
-        while(temp!=NULL){
-            idx = tabla->hash(temp->data) % new_capacity;
-            if(resized_array[idx]==NULL){
-                resized_array[idx] = temp;
-            }
-            else{
-                resized_array[idx]->last->next = temp;
-            }
-            resized_array[idx]->last = temp;
-            temp = temp->next;
-            resized_array[idx]->last->next = NULL;
-        }
+  else {
+    int bandera = 0;
+    GNode *temp = tabla->array[idx];
+    while (temp != NULL) {
+      if (tabla->comp(temp->data, data) == 1)
+        return temp->data;
+      temp = temp->next;
     }
-    tabla->capacidad = new_capacity;
-    GList* old_array = tabla->array;
-    tabla->array = resized_array;
-    free(old_array);
-     
+  }
+  return NULL;
 }
 
+void hash_resize(HashTable tabla) {
+  unsigned newCapacity = tabla->capacity * 2;
 
+  GList *newArray = malloc(sizeof(GList) * newCapacity);
+  for (unsigned i = 0; i < newCapacity; i++)
+    newArray[i] = NULL;
 
+  unsigned idx;
 
-
+  for (unsigned i = 0; i < tabla->capacity; i++) {
+    GNode *temp = tabla->array[i];
+    while (temp != NULL) {
+      idx = tabla->hash(temp->data) % newCapacity;
+      if (newArray[idx] == NULL) {
+        newArray[idx] = temp;
+      } else {
+        newArray[idx]->last->next = temp;
+      }
+      newArray[idx]->last = temp;
+      temp = temp->next;
+      newArray[idx]->last->next = NULL;
+    }
+  }
+  tabla->capacity = newCapacity;
+  GList *oldArray = tabla->array;
+  tabla->array = newArray;
+  free(oldArray);
+}

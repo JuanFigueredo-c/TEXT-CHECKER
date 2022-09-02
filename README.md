@@ -2,8 +2,8 @@
 
 ## CONVENCIONES
 
-Nombres de variables: ejemplo_ejemplo \
-Nombres de funciones: ejemplo_ejemplo \
+Nombres de variables: ejemploEjemplo (camelCase) \
+Nombres de funciones: ejemplo_ejemplo (snake_case)\
 Nombres de struct: Ejemplo \
 Idioma: Ingles 
 

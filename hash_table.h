@@ -1,5 +1,9 @@
-#include "glist.h"
+// TP FINAL - ESTRUCTURAS DE DATOS Y ALGORITMOS 1
+// JUAN BAUTISTA FIGUEREDO
 
+#ifndef __HASH_TABLE_H__
+#define __HASH_TABLE_H__
+#include "glist.h"
 
 /** Retorna una copia fisica del dato */
 typedef void *(*FuncionCopiadora)(void *dato, int dato2);
@@ -13,7 +17,7 @@ typedef unsigned (*FuncionHash)(void *dato);
 
 struct _HashTable{
     GList *array;
-    unsigned int capacidad;
+    unsigned int capacity;
     unsigned int elems;
     FuncionComparadora comp;
     FuncionCopiadora copy;
@@ -24,7 +28,7 @@ struct _HashTable{
 typedef struct _HashTable *HashTable;
 
 /** Crea una tabla hash */
-HashTable hash_create( unsigned capacidad, FuncionComparadora comp,
+HashTable hash_create( unsigned capacity, FuncionComparadora comp,
                       FuncionCopiadora copy, FuncionDestructora destr,
                       FuncionHash hash );
 
@@ -51,4 +55,5 @@ HashTable hash_dict();
 
 void* hash_get(HashTable tabla, void* data);
 
+#endif
 

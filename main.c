@@ -1,21 +1,19 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+// TP FINAL - ESTRUCTURAS DE DATOS Y ALGORITMOS 1
+// JUAN BAUTISTA FIGUEREDO
 
+#include <stdlib.h>
 #include "io.h"
 
-int main(int argc,char* argv[]){
-    
-    (void) argc;
-    (void) argv[0];
-    
-    HashTable dict_hash = hash_dict();
-    //HashTable wword_hash = open_file(argv[1], dict_hash);
-    handle_files(dict_hash, argv[1], argv[2]);
-    //write_file(wword_hash, argv[2]);
+int main(int argc, char *argv[]) {
 
-    hash_destroy(dict_hash);
-    //hash_destroy(wword_hash);
+  (void) argc;
+  (void) argv[0];
 
-    return 0;
+  HashTable dict = hash_dict();
+  if(dict != NULL) {
+    handle_files(dict, argv[1], argv[2]);
+    hash_destroy(dict);
+  }
+
+  return 0;
 }
