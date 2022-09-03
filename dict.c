@@ -74,10 +74,8 @@ HashTable hash_dict() {
         hash_insert(dict, buffer, len);
       len = 0;
     }
-}
-
+  }
   fclose(fp);
   free(fileName);
-
   return dict;
 }

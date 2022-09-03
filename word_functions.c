@@ -16,13 +16,10 @@ WWord *ww_create() {
   for (int i = 0; i < 5; i++)
     wrongWord->options[i] = malloc(sizeof(char) * MAX_LEN);
   wrongWord->line = 0;
-
   return wrongWord;
 }
 
-
 void wrong_word_handler(char *string, int len, HashTable dict, WWord * wrongWord) {
-
   HashTable *distArray = malloc(sizeof(HashTable) * (MAX_DIST - 1));
   for (int i = 0; i < (MAX_DIST - 1); i++)
     distArray[i] = hash_create(500, (FuncionComparadora) dict->comp,
@@ -59,21 +56,16 @@ void wrong_word_handler(char *string, int len, HashTable dict, WWord * wrongWord
       }
     }
   }
-
   for (int i = 0; i < MAX_DIST - 1; i++) {
     hash_destroy(distArray[i]);
   }
   free(distArray);
 }
 
-
 void word_check(char *string, int len, int currentDist, HashTable dict,
                 HashTable * distArray, WWord * wrongWord) {
-
   int flag = 0;
-
-  // Verificacion en hash de distancias anteriores y actual
-  for (int i = 0; i <= currentDist - 1 && currentDist < MAX_DIST; i++) {
+  for (int i = 0; i <= currentDist - 1 && currentDist < MAX_DIST; i++) { // Verificacion en hash de distancias anteriores y actual
     if (hash_search(distArray[i], string) == 1) {
       flag = 1;
       break;
@@ -99,20 +91,16 @@ void word_check(char *string, int len, int currentDist, HashTable dict,
         hash_insert(distArray[currentDist - 1], string, len);
 }
 
-
 int apply_rules(char *string, int len, HashTable dict,
                 HashTable * distArray, WWord * wrongWord, int currentDist) {
-  if (insert_rule(string, len, dict, distArray, wrongWord, currentDist)
-      == 1)
+  if (insert_rule(string, len, dict, distArray, wrongWord, currentDist) == 1)
     return 1;
-  if (replace_rule(string, len, dict, distArray, wrongWord, currentDist)
-      == 1)
+  if (replace_rule(string, len, dict, distArray, wrongWord, currentDist) == 1)
     return 1;
   if (len > 1) {
     if (divide_rule(string, len, dict, wrongWord) == 1)
       return 1;
-    if (swap_rule(string, len, dict, distArray, wrongWord, currentDist)
-        == 1)
+    if (swap_rule(string, len, dict, distArray, wrongWord, currentDist) == 1)
       return 1;
     if (eliminate_rule
         (string, len, dict, distArray, wrongWord, currentDist) == 1)
@@ -121,10 +109,8 @@ int apply_rules(char *string, int len, HashTable dict,
   return 0;
 }
 
-
 int swap_rule(char *string, int len, HashTable dict,
               HashTable * distArray, WWord * wrongWord, int currentDist) {
-
   char *result = malloc(sizeof(char) * len + 2);
   char auxChar;
 
@@ -148,10 +134,8 @@ int swap_rule(char *string, int len, HashTable dict,
   return 0;
 }
 
-
 int insert_rule(char *string, int len, HashTable dict,
                 HashTable * distArray, WWord * wrongWord, int currentDist) {
-
   char *result = malloc(sizeof(char) * len + 2);
   char auxChar;
   result[0] = ' ';
@@ -176,7 +160,6 @@ int insert_rule(char *string, int len, HashTable dict,
   return 0;
 }
 
-
 int eliminate_rule(char *string, int len, HashTable dict,
                    HashTable * distArray, WWord * wrongWord,
                    int currentDist) {
@@ -196,7 +179,6 @@ int eliminate_rule(char *string, int len, HashTable dict,
   free(result);
   return 0;
 }
-
 
 int replace_rule(char * string, int len, HashTable dict,
                  HashTable * distArray, WWord * wrongWord, int currentDist) {
@@ -224,19 +206,14 @@ int replace_rule(char * string, int len, HashTable dict,
   return 0;
 }
 
-
-
 int divide_rule(char *string, int len, HashTable dict, WWord * wrongWord) {
   char *result = malloc(sizeof(char) * len + 2);
   char *auxWord = malloc(sizeof(char) * len + 1);
 
-  char auxChar;
   memcpy(result + 1, string, len + 1);
   result[0] = ' ';
   for (int i = 1; i < len; i++) {
-    auxChar = result[i];
-    result[i] = result[i - 1];
-    result[i - 1] = auxChar;
+    result[i - 1] = result[i];
     result[i] = '\0';
     for (int j = i + 1; j < len + 1; j++) {
       auxWord[j - i - 1] = result[j];

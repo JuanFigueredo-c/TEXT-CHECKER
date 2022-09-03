@@ -56,8 +56,6 @@ unsigned hash_wword(WWord * wrongWord) {
 // FUNCIONES PARA EL MANEJO DE ARCHIVOS/PALABRAS
 
 void handle_files(HashTable dict, char *inputFileName, char *outputFileName) {
-
-
   FILE *inputFile = fopen(inputFileName, "r+");
 
   if(inputFile == NULL) {
@@ -98,11 +96,9 @@ void handle_files(HashTable dict, char *inputFileName, char *outputFileName) {
       len = 0;
     }
   }
-
   printf("El archivo con las correcciones \"%s\" ha sido escrito.\n", outputFileName);
   fclose(inputFile);
   fclose(outputFile);
-
   destr_wword(wrongWord);
   hash_destroy(wwordHash);
 }

@@ -11,7 +11,6 @@
 HashTable hash_create(unsigned capacity,
                       FuncionComparadora comp, FuncionCopiadora copy,
                       FuncionDestructora destr, FuncionHash hash) {
-
   HashTable tabla = malloc(sizeof(struct _HashTable));
 
   tabla->comp = comp;
@@ -30,7 +29,6 @@ HashTable hash_create(unsigned capacity,
 }
 
 HashTable hash_insert(HashTable tabla, void *dato, int len) {
-
   unsigned idx = tabla->hash(dato) % tabla->capacity;
 
   tabla->array[idx] =
@@ -41,49 +39,6 @@ HashTable hash_insert(HashTable tabla, void *dato, int len) {
     hash_resize(tabla);
   }
   return tabla;
-}
-
-
-void hash_destroy(HashTable tabla) {
-
-  for (unsigned i = 0; i < tabla->capacity; i++)
-    glist_destroy(tabla->array[i], tabla->destr);
-
-  free(tabla->array);
-  free(tabla);
-}
-
-int hash_search(HashTable tabla, void *dato) {
-  unsigned idx = tabla->hash(dato) % tabla->capacity;
-
-  if (tabla->array[idx] == NULL)
-    return 0;
-
-  GNode *temp = tabla->array[idx];
-  while (temp != NULL) {
-    if (tabla->comp(dato, temp->data) == 0)
-      return 1;
-    temp = temp->next;
-  }
-
-  return 0;
-}
-
-void *hash_get(HashTable tabla, void *data) {
-  unsigned idx = tabla->hash(data) % tabla->capacity;
-
-  if (tabla->array[idx])
-    return NULL;
-  else {
-    int bandera = 0;
-    GNode *temp = tabla->array[idx];
-    while (temp != NULL) {
-      if (tabla->comp(temp->data, data) == 1)
-        return temp->data;
-      temp = temp->next;
-    }
-  }
-  return NULL;
 }
 
 void hash_resize(HashTable tabla) {
@@ -113,4 +68,25 @@ void hash_resize(HashTable tabla) {
   GList *oldArray = tabla->array;
   tabla->array = newArray;
   free(oldArray);
+}
+
+int hash_search(HashTable tabla, void *dato) {
+  unsigned idx = tabla->hash(dato) % tabla->capacity;
+
+  if (tabla->array[idx] == NULL)
+    return 0;
+  GNode *temp = tabla->array[idx];
+  while (temp != NULL) {
+    if (tabla->comp(dato, temp->data) == 0)
+      return 1;
+    temp = temp->next;
+  }
+  return 0;
+}
+
+void hash_destroy(HashTable tabla) {
+  for (unsigned i = 0; i < tabla->capacity; i++)
+    glist_destroy(tabla->array[i], tabla->destr);
+  free(tabla->array);
+  free(tabla);
 }

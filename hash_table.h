@@ -53,7 +53,5 @@ void hash_destroy(HashTable tabla);
  * Devuelve una tabla hash con los datos del diccionario leido. */
 HashTable hash_dict();
 
-void* hash_get(HashTable tabla, void* data);
-
 #endif
 

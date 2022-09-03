@@ -13,7 +13,7 @@ GList glist_create() {
 GList glist_insert(GList list, void *data,
                    void *(*copy)(void *, int), int (*comp)(void *, void *),
                    int len) {
-
+                    
   for(GNode * temp = list; temp != NULL; temp = temp->next) {
     if (comp(temp->data, data) == 0) {
       return list;
