@@ -1,5 +1,14 @@
 # TEXT CHECKER
 
+## INTRODUCTION
+
+The text cheker is used to correct a text. Given a dictionary of valid \
+words, the program finds words in the text that do not appear in the dictionary \
+and, using a series of different transformations to each 'wrong' word, provides \
+with a few (up to five) altenatives of words that could have been misspelled. \
+After the program execution, an output file contains every wrong word found \
+and their corresponding alternatives.
+
 ## CODE CONVENTIONS
 
 Variable names: exampleExample (camelCase) \
